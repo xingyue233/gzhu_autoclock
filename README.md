@@ -1,8 +1,8 @@
 # 写在前面
 
-![https://img.shields.io/badge/flask-v1.1.1-blue](https://img.shields.io/badge/flask-v1.1.1-blue)![](https://img.shields.io/badge/bootstrap-v3-blue)![](https://img.shields.io/badge/requests-2.25.1-green)![](https://img.shields.io/badge/urllib3-1.26.2-green)![](https://img.shields.io/badge/pytesseract-0.3.7-green)![](https://img.shields.io/badge/platform-Windows%7CMac%20ox%7CUbuntu%7CCentos-lightgrey)
+![https://img.shields.io/badge/flask-v1.1.1-blue](https://img.shields.io/badge/flask-v1.1.1-blue) ![](https://img.shields.io/badge/bootstrap-v3-blue) ![](https://img.shields.io/badge/requests-2.25.1-green) ![](https://img.shields.io/badge/urllib3-1.26.2-green)![](https://img.shields.io/badge/pytesseract-0.3.7-green) ![](https://img.shields.io/badge/platform-Windows%7CMac%20ox%7CUbuntu%7CCentos-lightgrey)
 
-本仓库是在 [gzhu_no_clock_in](https://github.com/situ2001/gzhu_no_clock_in) 下进行代码封装，添加了`webserver`并提供用户操作界面。
+本仓库是在 [gzhu_no_clock_in](https://github.com/situ2001/gzhu_no_clock_in) 下进行了一下代码封装，添加了`webserver`并提供用户操作界面。
 
 本打卡辅助程序仅供学习交流使用，请勿过分依赖。开发者对使用或不使用本脚本造成的问题不负任何责任，不对脚本执行效果做出任何担保，原则上不提供任何形式的技术支持。
 
@@ -163,4 +163,4 @@ http://localhost/ //80端口内网访问
 
 ## iPhone
 
-[![WeWhMq.png](https://z3.ax1x.com/2021/07/15/WeWhMq.png)](https://imgtu.com/i/WeWhMq)
+[<img src="https://z3.ax1x.com/2021/07/15/WeWhMq.png" alt="WeWhMq.png" style="zoom:50%;" />](https://imgtu.com/i/WeWhMq)
