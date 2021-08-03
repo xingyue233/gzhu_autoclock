@@ -1,49 +1,46 @@
 import json
-import time
-import os
 from datetime import datetime
-from flask import Flask , render_template,request
-
-
+from logging import log
+import re
+from flask import Flask, render_template,request,redirect,url_for, session
+from login import login
+import os
 
 app = Flask(__name__)
+dirname = os.path.dirname(__file__)
+app.secret_key = '!@#$%^&*()11'
+app.config['SECRET_KEY'] = os.urandom(24)
 
 @app.route('/',methods=['GET', 'POST'])
-def index():
+def home():
     if request.method =='GET':
-        students = {}
-        with open('users.txt', mode='r') as f:
-                    for line in f:
-                        stu = line.split(' ')
-                        stu = [x.strip() for x in stu]
-                        students[stu[0]] = stu[1]
-        f.close()
-        with open('clocktime.txt',mode='r') as f:
-            _datetime = "{}:00:00".format(f.read())
-        f.close()
-        return render_template("index.html",users=students,datetime=_datetime)
-
-    if request.method == 'POST':
-        request.args.to_dict()
-        data = request.form
-        option = data['submit']
-        if option == '添加账号':
-            with open('users.txt', mode='a+') as f:
-                f.write("{} {}\n".format(data['username'],data['password']))
-            return "<script>alert('{}');window.location.href='./'</script>".format(data['username'] + "添加成功")
-
-        if option == '修改打卡时间':
-            with open('clocktime.txt', mode='w') as f:
-                f.write(data['h'])
-            return "<script>alert('将于每天{}时00分00秒进行自动打卡');window.location.href='./'</script>".format(data['h'])
-
-        if option == '查看系统运行状态':
-            with open('log.txt', mode='r') as f:
-                data = f.read()
-                _split = data.split('\n')
-                data_format = ""
-                for i in _split:
-                    data_format += i + "<br>"
-                return data_format
-            
+        session['user']=''
+        return render_template("login.html")
+        
+@app.route('/login', methods=['POST'])
+def login():
+    with open(os.path.join(dirname,'config.ini'), mode='r') as f:
+        text = f.read()
+        config = json.loads(text)
+        
+    username = [i['username'] for i in config]
+    password = [i['password'] for i in config]  
+    form = request.form.to_dict(True)
+    
+    res = login(form['username'], form['password'])
+    
+    if(res[1]):
+        if form['username'] in username:
+            session['user'] = username
+            return redirect('/index')
+        else:
+            return "<script>alert('登录失败');window.history.go(-1)</script>"
+        
+@app.route('/index', methods=['GET'])
+def index():
+    if(session['user']):
+        return session['user']
+    else:
+        return redirect('/')
+                    
 app.run("0.0.0.0",debug=False,port=80)
