@@ -1,53 +1,32 @@
-import os
+from requests.sessions import session
+from rsa import rsa_dec, rsa_enc
+import requests
 import re
-import pickle
-import msession
-from ocr import ocr
 
-def login(username: str, password: str):
-    session = msession.session
+class URL:
+    login= 'https://newcas.gzhu.edu.cn/cas/login?service=https%3A%2F%2Fnewmy.gzhu.edu.cn%2Fup%2Fview%3Fm%3Dup'
+    
+
+def login(username, password):
+    session = requests.session()
     session.cookies.clear()
-    res = session.get(msession.urls.cas, verify=False)
+    
+    res = session.get(URL.login, verify=True)
     lt = re.findall(r'name="lt" value="(.*)"', res.text)
-
-    captcha_url = msession.urls.captcha
-    captcha_path = 'captcha.jpg'
-    with session.get(captcha_url) as captcha:
-        with open(captcha_path, mode='wb') as captcha_jpg:
-            captcha_jpg.write(captcha.content)
-    captcha = ocr(captcha_path)
 
     login_form = {
         'username': username,
         'password': password,
-        'captcha': captcha,
-        'warn': 'true',
+        'ul': len(username),
+        'pl': len(password),
         'lt': lt[0],
         'execution': 'e1s1',
         '_eventId': 'submit',
-        'submit': '登录'
+        'rsa': rsa_enc(username + password + lt[0])
     }
-
-    post_res = session.post(msession.urls.cas, data=login_form)
-    
-    if '账号或密码错误' in post_res.text:
-        return False
-    
-    if '验证码不正确' in post_res.text:
-        return False
-
-    os.remove('captcha.jpg')
-
-    session.get(msession.urls.sso, verify=False)
-
-    cookies = session.cookies
-
-    if not os.path.exists('cookies'):
-        os.mkdir('cookies')
-
-    if not cookies:
-        print ('No cookies!')
+    post_res = session.post(URL.login, data=login_form)
+    if username in post_res.text:
+        return [session,True]
     else:
-        file_name = 'cookies' + os.sep + username
-        with open(file_name, mode='wb') as cookies_file:
-            pickle.dump(session.cookies, cookies_file)
+        return [session,False]
+
