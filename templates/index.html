@@ -13,18 +13,21 @@
       <h1 class="text-center">
       自动打卡 <span class="label label-default">小程序</span></h1>     
       <div class="container">
-        <a class="navbar-brand" href="#">用户登录</a>
+        <a class="navbar-brand" href="#">欢迎您， {{data.username}}</a>
       </div>
-      <form action='./login' method="POST">
+      <label for="exampleInputEmail1">当前状态：</label>
+      {% if data.status == 1 %}
+      <span class="label label-success">正在打卡</span> <a href="./edit?status=0">关闭打卡</a>
+      {% else %}
+      <span class="label label-default">打卡关闭</span> <a href="./edit?status=1">开始打卡</a>
+      {% endif %}
+      <form action='./edit' method="POST">
         <div class="form-group">
-          <label for="exampleInputEmail1">Username</label>
-          <input type="text" class="form-control" name="username" id="exampleInputuser" placeholder="username">
+          <label for="exampleInputEmail1">推送邮箱</label>
+          <input type="hidden" name="method" value="editemail">
+          <input type="email" class="form-control" name="email" value="{{data.email}}" id="exampleInputuser" placeholder="email">
         </div>
-        <div class="form-group">
-          <label for="exampleInputPassword1">Password</label>
-          <input type="password" class="form-control" name="password" id="exampleInputPassword" placeholder="Password">
-        </div>
-        <button type="submit" class="btn btn-primary btn-lg btn-block" id="add">登录</button>
+        <button type="submit" class="btn btn-primary btn-lg btn-block" id="edit">修改</button>
       </form>
       <div class="container">
       </div>
@@ -34,7 +37,7 @@
       <div class="panel panel-success">
       <div class="panel-heading">温馨提示</div>
       <div class="panel-body">
-        统一验证平台已全面更新，此处采用验证平台的账号密码，默认为身份证号后六位
+          将在每天早上8点钟自动打卡，打卡成功将会通过邮箱通知您
       </div>
       </div>
       <div class="alert alert-danger" role="alert"><strong>Warning </strong> 当前疫情防控形势严峻，请如实上报个人信息.</div>
